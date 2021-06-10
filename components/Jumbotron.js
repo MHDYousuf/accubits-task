@@ -1,31 +1,46 @@
-import { Button, Chip, Container, Grid, Typography } from '@material-ui/core';
 import React from 'react';
+import { Button, Chip, Container, Grid, Typography } from '@material-ui/core';
 import tickLogo from '../assets/tick.png';
 import bannerLogo from '../assets/Vector Smart Object.png';
 import buildingPNG from '../assets/Layer 5.png';
 
 function Banner() {
+	const [chipData, setChipData] = React.useState(null);
+
+	React.useEffect(async () => {
+		try {
+			const res = await fetch('http://localhost:3000/api/banner');
+			const data = await res.json();
+
+			setChipData(data);
+		} catch (err) {
+			console.log('error on Fetching Banner Details', err);
+		}
+	}, []);
+
 	return (
 		<section id='banner'>
 			<div className='banner-container'>
 				<Container maxWidth='md'>
 					<Grid container className='banner-wrapper' spacing={6}>
 						<Grid item xs={12} md={8} className='banner-text-wrapper'>
-							<Chip
-								className='chip'
-								label='#1 Editors Choice App of 2020'
-								avatar={
-									<div className='editor-logo-wrapper'>
-										<img
-											src={tickLogo}
-											alt='tick'
-											width='20'
-											height='20'
-											className='editor-logo'
-										/>
-									</div>
-								}
-							/>
+							{chipData && (
+								<Chip
+									className='chip'
+									label={chipData.chip}
+									avatar={
+										<div className='editor-logo-wrapper'>
+											<img
+												src={tickLogo}
+												alt='tick'
+												width='20'
+												height='20'
+												className='editor-logo'
+											/>
+										</div>
+									}
+								/>
+							)}
 							<Typography
 								variant='h3'
 								component='h2'
